@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>IFF3D STUDIO • Modelos 3D</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00a8e1;
+            --primary-dark: #0088b3;
+            --dark-1: #0a0f1e;
+            --dark-2: #1a1f2e;
+            --dark-3: #2a3a4a;
+            --text: #ffffff;
+            --text-muted: #b0c0d0;
+            --price: #4CAF50;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--dark-1), var(--dark-2));
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(10, 15, 30, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 0.8rem 1rem;
+            border-bottom: 2px solid var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover,
+        .nav-btn.active {
+            background: var(--primary);
+        }
+
+        .admin-login-btn {
+            border-color: #ff9800;
+            color: #ff9800;
+        }
+
+        .admin-login-btn:hover {
+            background: #ff9800;
+            color: white;
+        }
+
+        /* Contatos flutuantes */
+        .contact-floating {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 99;
+        }
+
+        .contact-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
+            text-decoration: none;
+        }
+
+        .contact-btn.whatsapp {
+            background: #25D366;
+        }
+
+        .contact-btn.instagram {
+            background: linear-gradient(45deg, #f09433, #d62976, #962fbf, #4f5bd5);
+        }
+
+        .contact-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            flex: 1;
+        }
+
+        /* Seções */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Grid de modelos */
+        .models-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .model-card {
+            background: rgba(30, 42, 58, 0.8);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 168, 225, 0.2);
+            transition: all 0.3s;
+        }
+
+        .model-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(0, 168, 225, 0.2);
+        }
+
+        .model-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: var(--dark-3);
+            cursor: pointer;
+        }
+
+        .model-info {
+            padding: 1.2rem;
+        }
+
+        .model-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+
+        .model-title:hover {
+            text-decoration: underline;
+        }
+
+        .model-description {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .model-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--price);
+            margin: 0.5rem 0;
+        }
+
+        .model-price small {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .model-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin: 0.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .model-link {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .model-link:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Admin Tabs */
+        .admin-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+            border-bottom: 2px solid var(--dark-3);
+            padding-bottom: 0.5rem;
+            overflow-x: auto;
+        }
+
+        .admin-tab {
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px 30px 0 0;
+            background: transparent;
+            border: 2px solid var(--dark-3);
+            border-bottom: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .admin-tab:hover,
+        .admin-tab.active {
+            background: var(--dark-3);
+            color: white;
+        }
+
+        .admin-panel {
+            background: rgba(30, 42, 58, 0.9);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .admin-panel h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 0.8rem 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--dark-3);
+        }
+
+        .admin-table th {
+            color: var(--primary);
+        }
+
+        .admin-actions button {
+            padding: 0.3rem 0.8rem;
+            margin: 0.2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .btn-edit {
+            background: #ff9800;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-add {
+            background: var(--primary);
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Calculadora */
+        .calculator-section {
+            background: var(--dark-1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .calc-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--text-muted);
+            margin-bottom: 0.3rem;
+            font-size: 0.9rem;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 0.7rem;
+            background: var(--dark-2);
+            border: 2px solid var(--dark-3);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .result-box {
+            background: var(--dark-2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid var(--primary);
+        }
+
+        .price-display {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--price);
+            margin: 1rem 0;
+        }
+
+        /* Post generator */
+        .post-generator {
+            background: var(--dark-1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .template-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .template-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .template-btn.active {
+            background: var(--primary);
+        }
+
+        .post-preview {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            white-space: pre-wrap;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .hashtags {
+            color: var(--primary);
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background: var(--dark-2);
+            padding: 1.5rem;
+            border-radius: 20px;
+            border: 2px solid var(--primary);
+            max-width: 500px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .modal-content input,
+        .modal-content textarea {
+            width: 100%;
+            padding: 0.7rem;
+            margin: 0.5rem 0;
+            background: var(--dark-1);
+            border: 2px solid var(--dark-3);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .modal-content button {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: var(--dark-3) !important;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--dark-3);
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Botões flutuantes de contato -->
+    <div class="contact-floating">
+        <a href="https://wa.me/5569992958235?text=Olá!%20Vi%20seus%20modelos%203D%20e%20tenho%20interesse" target="_blank" class="contact-btn whatsapp" title="WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://www.instagram.com/3d_iffstudio" target="_blank" class="contact-btn instagram" title="Instagram">
+            <i class="fab fa-instagram"></i>
+        </a>
+    </div>
+
+    <!-- Modal de Login Admin -->
+    <div class="modal" id="adminLoginModal">
+        <div class="modal-content">
+            <h2><i class="fas fa-lock"></i> Área Administrativa</h2>
+            <input type="password" id="adminPassword" placeholder="Digite a senha">
+            <button onclick="checkAdminLogin()">Entrar</button>
+            <button class="close-btn" onclick="closeModal('adminLoginModal')">Fechar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Modelo (Adicionar/Editar) -->
+    <div class="modal" id="modelModal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Adicionar Modelo</h2>
+            <input type="hidden" id="modelId">
+            <input type="text" id="modelName" placeholder="Nome do modelo">
+            <textarea id="modelDesc" rows="3" placeholder="Descrição"></textarea>
+            <input type="url" id="modelImageUrl" placeholder="URL da imagem">
+            <input type="url" id="modelUrl" placeholder="Link do modelo na MakerWorld" value="https://makerworld.com/pt">
+            <input type="number" id="modelPrice" placeholder="Preço (R$)" step="0.1">
+            <input type="text" id="modelTime" placeholder="Tempo de impressão (ex: 3h)">
+            <input type="text" id="modelMaterial" placeholder="Material (ex: PLA)">
+            <input type="text" id="modelDownloads" placeholder="Downloads (ex: 1.2k)">
+            <input type="number" id="modelRating" placeholder="Avaliação (0-5)" step="0.1" min="0" max="5">
+            <button onclick="saveModel()">Salvar</button>
+            <button class="close-btn" onclick="closeModal('modelModal')">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-cube" style="color: var(--primary);"></i>
+                IFF3D <span>STUDIO</span>
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <a href="https://makerworld.com/pt" target="_blank" class="nav-btn">
+                    <i class="fas fa-globe"></i> MakerWorld
+                </a>
+                <button class="nav-btn admin-login-btn" onclick="openAdminLoginModal()">
+                    <i class="fas fa-user-shield"></i> Admin
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Seção pública: Modelos -->
+        <div id="section-models" class="section active">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem;">
+                <h2><i class="fas fa-cubes" style="color: var(--primary);"></i> Modelos Disponíveis</h2>
+                <!-- Botão de adicionar visível apenas para admin (controlado por JS) -->
+                <button class="btn-add" id="addModelBtn" style="display: none;" onclick="openAddModal()">
+                    <i class="fas fa-plus"></i> Adicionar Modelo
+                </button>
+            </div>
+            <div class="models-grid" id="modelsGrid"></div>
+        </div>
+
+        <!-- Painel Admin (visível apenas após login) -->
+        <div id="adminPanel" style="display: none;">
+            <div class="admin-tabs">
+                <button class="admin-tab active" onclick="showAdminTab('models')">Modelos</button>
+                <button class="admin-tab" onclick="showAdminTab('calculator')">Precificação</button>
+                <button class="admin-tab" onclick="showAdminTab('posts')">Gerador de Posts</button>
+                <button class="admin-tab" onclick="showAdminTab('promos')">Promoções</button>
+            </div>
+
+            <!-- Aba Modelos -->
+            <div id="admin-models" class="admin-panel">
+                <h3><i class="fas fa-cog"></i> Gerenciar Modelos</h3>
+                
+                <!-- Botões de backup -->
+                <div style="display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                    <button class="btn-add" onclick="exportBackup()" style="background: #4CAF50;">
+                        <i class="fas fa-download"></i> Exportar Backup
+                    </button>
+                    <button class="btn-add" onclick="document.getElementById('importFile').click()" style="background: #ff9800;">
+                        <i class="fas fa-upload"></i> Importar Backup
+                    </button>
+                    <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importBackup(event)">
+                </div>
+
+                <button class="btn-add" onclick="openAddModal()"><i class="fas fa-plus"></i> Novo Modelo</button>
+                <div style="overflow-x: auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Preço</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Aba Calculadora -->
+            <div id="admin-calculator" class="admin-panel" style="display: none;">
+                <h3><i class="fas fa-calculator"></i> Calculadora de Preços</h3>
+                <div class="calculator-section">
+                    <div class="calc-grid">
+                        <div>
+                            <div class="input-group">
+                                <label>Material (R$/kg)</label>
+                                <input type="number" id="calcMatPrice" value="70" step="1">
+                            </div>
+                            <div class="input-group">
+                                <label>Peso (gramas)</label>
+                                <input type="number" id="calcWeight" value="50" step="5">
+                            </div>
+                            <div class="input-group">
+                                <label>Tempo de impressão (horas)</label>
+                                <input type="number" id="calcHours" value="3" step="0.5">
+                            </div>
+                            <div class="input-group">
+                                <label>Complexidade</label>
+                                <select id="calcComplexity">
+                                    <option value="1">Simples</option>
+                                    <option value="1.2" selected>Média</option>
+                                    <option value="1.5">Complexa</option>
+                                </select>
+                            </div>
+                            <button class="nav-btn" onclick="updateCalculator()">Calcular</button>
+                        </div>
+                        <div>
+                            <div class="result-box">
+                                <h3>Preço Sugerido</h3>
+                                <div class="price-display" id="calcResult">R$ 0,00</div>
+                                <p style="color: var(--text-muted);">*Custos: material + energia + mão de obra + 25% lucro</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aba Gerador de Posts -->
+            <div id="admin-posts" class="admin-panel" style="display: none;">
+                <h3><i class="fas fa-pen"></i> Gerador de Posts</h3>
+                <div class="post-generator">
+                    <div class="input-group">
+                        <label>Escolha o modelo</label>
+                        <select id="postModelSelect"></select>
+                    </div>
+                    <div class="template-buttons">
+                        <button class="template-btn active" onclick="setPostTemplate('lancamento')">Lançamento</button>
+                        <button class="template-btn" onclick="setPostTemplate('promocao')">Promoção</button>
+                        <button class="template-btn" onclick="setPostTemplate('dica')">Dica</button>
+                    </div>
+                    <div class="post-preview" id="postPreview"></div>
+                    <div class="hashtags" id="postHashtags"></div>
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+                        <button class="btn-add" onclick="copyPost()"><i class="fas fa-copy"></i> Copiar</button>
+                        <button class="btn-add" onclick="sharePost()"><i class="fab fa-whatsapp"></i> Compartilhar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aba Promoções (placeholder) -->
+            <div id="admin-promos" class="admin-panel" style="display: none;">
+                <h3><i class="fas fa-tags"></i> Promoções Ativas</h3>
+                <p style="color: var(--text-muted);">Em breve: cadastro de promoções percentuais.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 IFF3D STUDIO - Modelos para impressão 3D</p>
+        <p style="margin-top: 0.5rem;">
+            <i class="fab fa-instagram" style="color: var(--primary);"></i> @3d_iffstudio
+        </p>
+    </footer>
+
+    <script>
+        // Configurações
+        const ADMIN_PASSWORD = "iff3d2026";
+        let isAdmin = false;
+        let modelos = [];
+        let currentPostTemplate = 'lancamento';
+
+        // Modelos iniciais (Unsplash)
+        const modelosIniciais = [
+            { id: 1, nome: "Relógio Android", desc: "Relógio moderno para impressão 3D", imagem: "https://images.unsplash.com/photo-1563861826100-9cb868fd2e9c?w=400", url: "https://makerworld.com/pt", preco: 39.90, tempo: "4h", material: "PLA", downloads: "2.3k", rating: 4.8 },
+            { id: 2, nome: "Suporte Headphone", desc: "Suporte prático para fones", imagem: "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=400", url: "https://makerworld.com/pt", preco: 29.90, tempo: "2h", material: "PLA", downloads: "1.5k", rating: 4.7 },
+            { id: 3, nome: "Vaso Suculento", desc: "Vaso pequeno para plantas", imagem: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=400", url: "https://makerworld.com/pt", preco: 19.90, tempo: "1.5h", material: "PETG", downloads: "3.1k", rating: 4.9 },
+            { id: 4, nome: "Dragão Articulado", desc: "Mini dragão com partes móveis", imagem: "https://images.unsplash.com/photo-1608889476518-738c9b1dcb40?w=400", url: "https://makerworld.com/pt", preco: 49.90, tempo: "6h", material: "PLA Silk", downloads: "5.7k", rating: 4.9 },
+            { id: 5, nome: "Porta Canetas", desc: "Organizador de mesa", imagem: "https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=400", url: "https://makerworld.com/pt", preco: 24.90, tempo: "2h", material: "PLA", downloads: "4.2k", rating: 4.6 },
+            { id: 6, nome: "Luminária LED", desc: "Base para luz noturna", imagem: "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=400", url: "https://makerworld.com/pt", preco: 59.90, tempo: "5h", material: "PLA", downloads: "2.9k", rating: 4.8 }
+        ];
+
+        // Carregar modelos do localStorage
+        function loadModels() {
+            const saved = localStorage.getItem('iff3d_models');
+            if (saved) {
+                modelos = JSON.parse(saved);
+            } else {
+                modelos = modelosIniciais;
+                localStorage.setItem('iff3d_models', JSON.stringify(modelos));
+            }
+            renderModels();
+            renderAdminTable();
+            updatePostSelect();
+        }
+
+        // Renderizar cards na seção pública
+        function renderModels() {
+            const grid = document.getElementById('modelsGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            modelos.forEach(m => {
+                const card = document.createElement('div');
+                card.className = 'model-card';
+                card.innerHTML = `
+                    <img class="model-image" src="${m.imagem}" alt="${m.nome}" onerror="this.src='https://via.placeholder.com/400x300?text=3D'" onclick="window.open('${m.url}','_blank')">
+                    <div class="model-info">
+                        <h3 class="model-title" onclick="window.open('${m.url}','_blank')">${m.nome}</h3>
+                        <p class="model-description">${m.desc}</p>
+                        <div class="model-price">R$ ${m.preco.toFixed(2)} <small>à vista</small></div>
+                        <div class="model-stats">
+                            <span><i class="fas fa-clock"></i> ${m.tempo}</span>
+                            <span><i class="fas fa-cube"></i> ${m.material}</span>
+                            <span><i class="fas fa-star" style="color:#FFD700;"></i> ${m.rating}</span>
+                        </div>
+                        <button class="model-link" onclick="window.open('${m.url}','_blank')">
+                            <i class="fas fa-external-link-alt"></i> Ver modelo
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Renderizar tabela admin
+        function renderAdminTable() {
+            const tbody = document.getElementById('adminTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            modelos.forEach(m => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${m.id}</td>
+                    <td>${m.nome}</td>
+                    <td>R$ ${m.preco.toFixed(2)}</td>
+                    <td class="admin-actions">
+                        <button class="btn-edit" onclick="editModel(${m.id})"><i class="fas fa-edit"></i> Editar</button>
+                        <button class="btn-delete" onclick="deleteModel(${m.id})"><i class="fas fa-trash"></i> Excluir</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Atualizar select de modelos no gerador de posts
+        function updatePostSelect() {
+            const select = document.getElementById('postModelSelect');
+            if (!select) return;
+            select.innerHTML = '';
+            modelos.forEach(m => {
+                const option = document.createElement('option');
+                option.value = m.id;
+                option.textContent = m.nome;
+                select.appendChild(option);
+            });
+            generatePost();
+        }
+
+        // Gerar post baseado no template
+        function generatePost() {
+            const select = document.getElementById('postModelSelect');
+            if (!select) return;
+            const modelId = select.value;
+            const modelo = modelos.find(m => m.id == modelId) || modelos[0];
+            if (!modelo) return;
+
+            let text = '';
+            let hashtags = '#Impressao3D #MakerWorld #IFF3DStudio';
+
+            if (currentPostTemplate === 'lancamento') {
+                text = `✨ NOVO LANÇAMENTO! ✨\n\nApresentamos o ${modelo.nome}!\n${modelo.desc}\n\n💰 Preço especial: R$ ${modelo.preco.toFixed(2)}\n⏱️ Tempo de impressão: ${modelo.tempo}\n🧵 Material: ${modelo.material}\n\n🔗 Link na bio para encomendar!\n📲 WhatsApp na bio`;
+                hashtags += ' #Lançamento #Novidade';
+            } else if (currentPostTemplate === 'promocao') {
+                text = `🎉 PROMOÇÃO IMPERDÍVEL! 🎉\n\n${modelo.nome} com 10% de desconto!\nDe R$ ${(modelo.preco * 1.1).toFixed(2)} por apenas R$ ${modelo.preco.toFixed(2)}!\n\n⏳ Por tempo limitado\n🚀 Impressão sob demanda\n\nCorre no WhatsApp!`;
+                hashtags += ' #Promoção #Desconto';
+            } else if (currentPostTemplate === 'dica') {
+                text = `💡 DICA DE IMPRESSÃO!\n\nO modelo ${modelo.nome} foi otimizado para:\n✅ Impressão sem suportes\n✅ Acabamento liso\n✅ Material: ${modelo.material}\n\nBaixe o arquivo na MakerWorld! (link na bio)`;
+                hashtags += ' #Dica3D #Impressão3D';
+            }
+
+            document.getElementById('postPreview').innerText = text;
+            document.getElementById('postHashtags').innerText = hashtags;
+        }
+
+        function setPostTemplate(template) {
+            currentPostTemplate = template;
+            document.querySelectorAll('#admin-posts .template-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            generatePost();
+        }
+
+        function copyPost() {
+            const text = document.getElementById('postPreview').innerText;
+            const hashtags = document.getElementById('postHashtags').innerText;
+            navigator.clipboard.writeText(text + '\n\n' + hashtags).then(() => {
+                alert('Post copiado para a área de transferência!');
+            });
+        }
+
+        function sharePost() {
+            const text = document.getElementById('postPreview').innerText;
+            const hashtags = document.getElementById('postHashtags').innerText;
+            const msg = encodeURIComponent(text + '\n\n' + hashtags);
+            window.open(`https://wa.me/?text=${msg}`, '_blank');
+        }
+
+        // Admin: abrir modal de login
+        function openAdminLoginModal() {
+            document.getElementById('adminLoginModal').style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function checkAdminLogin() {
+            const pwd = document.getElementById('adminPassword').value;
+            if (pwd === ADMIN_PASSWORD) {
+                isAdmin = true;
+                document.getElementById('adminLoginModal').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                document.getElementById('addModelBtn').style.display = 'inline-block';
+                renderAdminTable();
+                updatePostSelect();
+                updateCalculator();
+                alert('✅ Modo admin ativado!');
+            } else {
+                alert('❌ Senha incorreta!');
+            }
+            document.getElementById('adminPassword').value = '';
+        }
+
+        // Abrir modal para adicionar
+        function openAddModal() {
+            if (!isAdmin) return;
+            document.getElementById('modalTitle').innerText = 'Adicionar Modelo';
+            document.getElementById('modelId').value = '';
+            document.getElementById('modelName').value = '';
+            document.getElementById('modelDesc').value = '';
+            document.getElementById('modelImageUrl').value = '';
+            document.getElementById('modelUrl').value = 'https://makerworld.com/pt';
+            document.getElementById('modelPrice').value = '';
+            document.getElementById('modelTime').value = '';
+            document.getElementById('modelMaterial').value = '';
+            document.getElementById('modelDownloads').value = '';
+            document.getElementById('modelRating').value = '';
+            document.getElementById('modelModal').style.display = 'flex';
+        }
+
+        // Editar modelo
+        function editModel(id) {
+            if (!isAdmin) return;
+            const m = modelos.find(x => x.id === id);
+            if (!m) return;
+            document.getElementById('modalTitle').innerText = 'Editar Modelo';
+            document.getElementById('modelId').value = m.id;
+            document.getElementById('modelName').value = m.nome;
+            document.getElementById('modelDesc').value = m.desc;
+            document.getElementById('modelImageUrl').value = m.imagem;
+            document.getElementById('modelUrl').value = m.url;
+            document.getElementById('modelPrice').value = m.preco;
+            document.getElementById('modelTime').value = m.tempo;
+            document.getElementById('modelMaterial').value = m.material;
+            document.getElementById('modelDownloads').value = m.downloads;
+            document.getElementById('modelRating').value = m.rating;
+            document.getElementById('modelModal').style.display = 'flex';
+        }
+
+        // Salvar modelo
+        function saveModel() {
+            if (!isAdmin) return;
+            const id = document.getElementById('modelId').value;
+            const nome = document.getElementById('modelName').value.trim();
+            const desc = document.getElementById('modelDesc').value.trim();
+            const imagem = document.getElementById('modelImageUrl').value.trim();
+            const url = document.getElementById('modelUrl').value.trim();
+            const preco = parseFloat(document.getElementById('modelPrice').value);
+            const tempo = document.getElementById('modelTime').value.trim();
+            const material = document.getElementById('modelMaterial').value.trim();
+            const downloads = document.getElementById('modelDownloads').value.trim();
+            const rating = parseFloat(document.getElementById('modelRating').value);
+
+            if (!nome || !desc) {
+                alert('Preencha nome e descrição!');
+                return;
+            }
+
+            const modelo = {
+                id: id ? parseInt(id) : Date.now(),
+                nome,
+                desc,
+                imagem: imagem || 'https://via.placeholder.com/400x300?text=3D',
+                url: url || 'https://makerworld.com/pt',
+                preco: isNaN(preco) ? 0 : preco,
+                tempo: tempo || 'Sob consulta',
+                material: material || 'PLA',
+                downloads: downloads || '0',
+                rating: isNaN(rating) ? 5 : rating
+            };
+
+            if (id) {
+                const index = modelos.findIndex(x => x.id == id);
+                if (index !== -1) modelos[index] = modelo;
+            } else {
+                modelos.push(modelo);
+            }
+
+            localStorage.setItem('iff3d_models', JSON.stringify(modelos));
+            closeModal('modelModal');
+            renderModels();
+            renderAdminTable();
+            updatePostSelect();
+        }
+
+        // Deletar modelo
+        function deleteModel(id) {
+            if (!isAdmin) return;
+            if (confirm('Tem certeza que deseja excluir este modelo?')) {
+                modelos = modelos.filter(m => m.id !== id);
+                localStorage.setItem('iff3d_models', JSON.stringify(modelos));
+                renderModels();
+                renderAdminTable();
+                updatePostSelect();
+            }
+        }
+
+        // Navegação nas abas admin
+        function showAdminTab(tab) {
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            document.querySelectorAll('#adminPanel .admin-panel').forEach(p => p.style.display = 'none');
+            document.getElementById(`admin-${tab}`).style.display = 'block';
+        }
+
+        // Calculadora
+        function updateCalculator() {
+            const matPrice = parseFloat(document.getElementById('calcMatPrice').value) || 70;
+            const weight = parseFloat(document.getElementById('calcWeight').value) || 50;
+            const hours = parseFloat(document.getElementById('calcHours').value) || 3;
+            const complexity = parseFloat(document.getElementById('calcComplexity').value) || 1.2;
+
+            const materialCost = (matPrice * weight) / 1000;
+            const energyCost = hours * 0.60;
+            const laborCost = hours * 15 * complexity;
+            const fixedCost = 3;
+
+            const totalCost = materialCost + energyCost + laborCost + fixedCost;
+            const finalPrice = totalCost * 1.25;
+
+            document.getElementById('calcResult').innerText = `R$ ${finalPrice.toFixed(2)}`;
+        }
+
+        // Funções de backup
+        function exportBackup() {
+            const dataStr = JSON.stringify(modelos, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `iff3d_backup_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (Array.isArray(imported)) {
+                        modelos = imported;
+                        localStorage.setItem('iff3d_models', JSON.stringify(modelos));
+                        renderModels();
+                        renderAdminTable();
+                        updatePostSelect();
+                        alert('✅ Backup importado com sucesso!');
+                    } else {
+                        alert('❌ Arquivo inválido.');
+                    }
+                } catch (error) {
+                    alert('❌ Erro ao ler o arquivo.');
+                }
+            };
+            reader.readAsText(file);
+            document.getElementById('importFile').value = '';
+        }
+
+        // Inicialização
+        window.onload = () => {
+            loadModels();
+        };
+    </script>
+</body>
+</html>
